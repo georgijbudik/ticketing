@@ -2,7 +2,8 @@ import express from "express";
 import "express-async-errors";
 
 import cookieSession from "cookie-session";
-import { NotFoundError, errorHandler } from "@gbtickets1/common";
+import { NotFoundError, currentUser, errorHandler } from "@gbtickets1/common";
+import { createTicketRouter } from "../routes/new";
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.use(
     secure: process.env.NODE_ENV !== "test",
   })
 );
+
+app.use(currentUser);
+app.use(createTicketRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
